@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spotify-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: spotify
+  template:
+    metadata:
+      labels:
+        app: spotify
+    spec:
+      containers:
+      - name: spotify
+        image: spotify-clone:latest
+        ports:
+        - containerPort: 80
