@@ -1,26 +1,32 @@
 pipeline {
-  agent any
+    agent any
 
-  stages {
-    stage('Clone Repo') {
-      steps {
-        git 'https://github.com/AadamDev/spotify-devops-project.git'
-      }
-    }
+    stages {
+        stage('Clone Repo') {
+            steps {
+                git 'git@github.com:AadamDev/spotify-devops-project.git'
+            }
+        }
 
-    stage('Build Docker Image') {
-      steps {
-        sh 'docker build -t spotify-clone:latest .'
-      }
-    }
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t aadamdev/spotify:latest .'
+            }
+        }
 
-    stage('Deploy to Kubernetes') {
-      steps {
-        sh '''
-          kubectl apply -f k8s-deployment.yaml
-          kubectl apply -f k8s-service.yaml
-        '''
-      }
+        stage('Push Docker Image') {
+            steps {
+                sh 'docker push aadamdev/spotify:latest'
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                sh '''
+                kubectl apply -f k8s-deployment.yaml
+                kubectl apply -f k8s-service.yaml
+                '''
+            }
+        }
     }
-  }
 }
